@@ -1,5 +1,11 @@
 # Team Project - Task Management System
 
+## Demo
+
+![Project Demo](screenshots/demo.gif)
+
+---
+
 ## Overview
 
 **Team Project** is a Django-based web application designed to help teams organize and manage tasks efficiently.
@@ -98,11 +104,6 @@ Managers and employees can interact with tasks according to the permissions defi
 
 ---
 
-## Demo
-
-![Project Demo](screenshots/demo.gif)
-
----
 
 ## Installation
 

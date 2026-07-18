@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page">
+    <div class="card card-wide">
+        <h1>{% if task %}עדכון משימה: {{ task.name }}{% else %}הוספת משימה{% endif %}</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <p>
+                <label>שם המשימה:</label>
+                <input type="text" name="name" value="{{ task.name|default:'' }}" required>
+            </p>
+
+            <p>
+                <label>תיאור:</label>
+                <textarea name="description" required>{{ task.description|default:'' }}</textarea>
+            </p>
+
+            <p>
+                <label>תאריך סיום:</label>
+                <input type="date" name="dateToEnd" value="{{ task.dateToEnd|date:'Y-m-d' }}" required>
+            </p>
+
+            <p>
+                <label>סטטוס:</label>
+                <select name="status">
+                    <option value="new" {% if current_status == "new" %}selected{% endif %}>New</option>
+                    <option value="inProgress" {% if current_status == "inProgress" or current_status == "In Progress" %}selected{% endif %}>In Progress</option>
+                    <option value="done" {% if current_status == "done" %}selected{% endif %}>Done</option>
+                </select>
+            </p>
+
+            <p>
+                <label>אחראי (User):</label>
+                {{ form.user }}
+            </p>
+
+            <button type="submit">
+                {% if task %}שמור שינויים{% else %}צור משימה{% endif %}
+            </button>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

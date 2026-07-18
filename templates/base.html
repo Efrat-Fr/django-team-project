@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>{% block title %}Task Manager{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="logo" href="{% url 'home' %}">TaskManager</a>
+
+    <ul class="nav-links">
+        <li><a href="{% url 'home' %}">HOME</a></li>
+        {% if user.role == 'manager' %}
+        <li><a href="{% url 'taskList' %}">All Tasks</a></li>
+        {% endif %}
+        <li><a href="{% url 'taskListByTeam' %}">Tasks By Team</a></li>
+        <li><a href="{% url 'findTaskNoWorker' %}">No Worker</a></li>
+
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                 {% csrf_token %}
+                <button type="submit" style="background: none; border: none; color: #34495e; cursor: pointer; font-family: inherit; font-size: inherit;">
+                 Logout
+                 </button>
+            </form>
+        {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+<div class="page">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

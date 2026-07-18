@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="card">
+        <h1> משימות של הקבוצה שלי</h1>
+           <div class="filter-box">
+        <form method="get" name="status" action="{% url 'selectByStatus'%}">
+            <input type="hidden" name="from" value="byTeam">
+            <label class="filter-label">מיון לפי סטטוס</label>
+            <select name="status" onchange="this.form.submit()">
+                <option value="">All</option>
+                <option value="inProgress" {% if statusSelect|default:'' == "inProgress" %}selected{% endif %}>In Progress</option>
+                <option value="done" {% if statusSelect|default:'' == "done" %}selected{% endif %}>Done</option>
+            </select>
+        </form>
+    </div>
+
+        <div class="filter-box">
+        <form method="get" name="user" action="{% url 'selectByUser'%}">
+            <input type="hidden" name="from" value="byTeam">
+             <label class="filter-label">מיון לפי עובד</label>
+            <button type="submit">למיין</button>
+        </form>
+    </div>
+
+        <div class="task-list">
+            {% for t in tasks %}
+            <div class="task-card">
+                <div class="task-title">{{ t.name|default:t }}</div>
+                <div class="task-status">סטטוס נוכחי: {{ t.status }}</div>
+                <div class="task-status">{{ user.team|default:t }}</div>
+                {% if t.user %}
+                <div class="task-user">Assigned to: {{ t.user }}</div>
+                {% endif %}
+
+                <form method="post" action="{% url 'changeStatus' t.id %}" class="task-actions">
+                    {% csrf_token %}
+                    <select name="status">
+                        <option value="inProgress" {% if t.status == "inProgress" %}selected{% endif %}>In Progress</option>
+                        <option value="done" {% if t.status == "done" %}selected{% endif %}>Done</option>
+                    </select>
+                    <button type="submit">עדכן סטטוס</button>
+                </form>
+            </div>
+            {% empty %}
+            <p>אין משימות כרגע.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

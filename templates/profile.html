@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="card" style="max-width: 500px;">
+        <h1>הגדרת פרופיל</h1>
+        <p style="color: #aaa; margin-bottom: 20px;">הצטרף למערכת ניהול המשימות</p>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            <div class="form-wrapper">
+                {{ form.as_p }}
+            </div>
+
+            <button type="submit" style="width: 100%; margin-top: 20px;">שמירת הגדרות</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

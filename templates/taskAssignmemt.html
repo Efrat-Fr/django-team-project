@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Task Assignment{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="card">
+        <h1>הקצאת משימות</h1>
+
+        <div class="task-list">
+            {% for t in tasks %}
+            <div class="task-card">
+                <div class="task-title">{{ t }}</div>
+
+                <div class="task-actions">
+                    <form method="post" action="{% url 'taskAssignment' t.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Assign the task</button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <p>אין משימות זמינות להקצאה.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

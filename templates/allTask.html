@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+<div class="card">
+
+    <h1>All Tasks</h1>
+
+    <!-- סינון לפי סטטוס -->
+    <div class="filter-box">
+        <form method="get" name="status" action="{% url 'selectByStatus'%}">
+            <input type="hidden" name="from" value="allTask">
+            <label class="filter-label">מיון לפי סטטוס</label>
+            <select name="status" onchange="this.form.submit()">
+                <option value="">All</option>
+                <option value="new" {% if statusSelect|default:''|stringformat:"s" == "new" %}selected{% endif %}>New</option>
+                <option value="inProgress" {% if statusSelect|default:'' == "inProgress" %}selected{% endif %}>In Progress</option>
+                <option value="done" {% if statusSelect|default:'' == "done" %}selected{% endif %}>Done</option>
+            </select>
+        </form>
+    </div>
+
+
+    <div class="filter-box">
+        <form method="get" name="user" action="{% url 'selectByUser'%}">
+            <input type="hidden" name="from" value="allTask">
+             <label class="filter-label">מיון לפי עובד</label>
+            <button type="submit">למיין</button>
+        </form>
+    </div>
+
+    <!-- רשימת משימות -->
+    <div class="task-list">
+        {% for t in tasks %}
+        <div class="task-card">
+
+            <div class="task-header">
+                <div class="task-name">{{ t.name }}</div>
+                <div class="task-status">{{ t.status }}</div>
+            </div>
+
+            {% if t.user %}
+                <div class="task-user">Assigned to: {{ t.user }}</div>
+            {% else %}
+                <div class="task-user unassigned">Unassigned</div>
+            {% endif %}
+
+            <div class="task-actions">
+                {% if not t.user %}
+                <form method="post" action="{% url 'UpdateTask' t.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Update</button>
+                </form>
+                {% endif %}
+
+                {% if not t.user %}
+                <form method="post" action="{% url 'deleteTask' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="danger">Delete</button>
+                </form>
+                {% endif %}
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- הוספת משימה -->
+    <div class="add-task">
+        <form method="post" action="{% url 'addTask' %}">
+            {% csrf_token %}
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
